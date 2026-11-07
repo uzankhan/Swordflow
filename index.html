@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#080a0d" />
+    <meta name="description" content="Command a cinematic blade swarm with your hand. Camera processing stays on your device." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Swordflow — Command the swarm</title>
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <canvas id="world" aria-label="A cinematic 3D sword swarm arena"></canvas>
+      <div class="scene-grain" aria-hidden="true"></div>
+      <div class="scene-vignette" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="wordmark" href="#" aria-label="Swordflow home">
+          <span class="brand-sigil" aria-hidden="true"><i></i><b></b><em></em></span>
+          <span class="wordmark-type"><strong>SWORD<span>FLOW</span></strong><small>GESTURE FORGE <i>·</i> 01</small></span>
+        </a>
+        <div class="live-cluster">
+          <span id="status-led" class="status-led"></span>
+          <span id="status-label">FIELD IDLE</span>
+          <span class="cluster-divider"></span>
+          <span id="fps-label">-- FPS</span>
+        </div>
+        <div class="top-actions">
+          <button id="guide-toggle" class="utility-btn" aria-label="Open gesture guide" title="Gesture guide">?</button>
+          <button id="settings-toggle" class="utility-btn" aria-label="Open settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Z"/><path d="m19.4 13.6 1.3 1-1.5 2.6-1.6-.6a7 7 0 0 1-1.3.8l-.3 1.7h-3l-.3-1.7a7 7 0 0 1-1.4-.8l-1.5.6-1.5-2.6 1.3-1a7 7 0 0 1 0-1.6l-1.3-1 1.5-2.6 1.5.6a7 7 0 0 1 1.4-.8l.3-1.7h3l.3 1.7a7 7 0 0 1 1.3.8l1.6-.6 1.5 2.6-1.3 1a7 7 0 0 1 0 1.6Z"/></svg></button>
+          <button id="fullscreen-toggle" class="utility-btn" aria-label="Toggle fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+        </div>
+      </header>
+
+      <div class="arena-caption"><span class="caption-index">01</span><span>THE QUIET BEFORE THE FLIGHT</span><i></i><span id="formation-caption">FORMATION · ORBIT</span></div>
+
+      <main class="stage-ui">
+        <section id="intro-panel" class="intro-panel">
+          <div class="eyebrow"><span></span> A NEW KIND OF CONTROL</div>
+          <h1>Move your hand.<br /><em>Move the world.</em></h1>
+          <p id="intro-copy" class="intro-copy">A living blade constellation, guided by your motion. No controller. No gloves. Just you and the swarm.</p>
+          <div class="launch-actions">
+            <button id="start-camera" class="primary-cta"><span class="cta-icon">✳</span><span><strong>ENTER THE FIELD</strong><small>ENABLE HAND CONTROL</small></span><b class="cta-arrow">↗</b></button>
+            <button id="start-demo" class="secondary-cta">TRY MOUSE CONTROL <span>→</span></button>
+          </div>
+          <div class="privacy-note"><span class="privacy-lock">◈</span><span>Camera video stays on this device.<br /><b>It isn't recorded or uploaded.</b></span></div>
+        </section>
+
+        <section id="live-panel" class="live-panel" aria-live="polite">
+          <div class="live-title"><span class="live-pulse"></span><span id="live-mode-label">HAND LINK</span><span id="pose-label">WAITING FOR HAND</span></div>
+          <div class="camera-frame">
+            <video id="camera-feed" autoplay muted playsinline></video>
+            <canvas id="hand-overlay"></canvas>
+            <div id="camera-placeholder" class="camera-placeholder"><span class="scan-icon">◎</span><small>PLACE YOUR HAND<br />IN THE FRAME</small></div>
+            <div class="camera-corner corner-tl"></div><div class="camera-corner corner-tr"></div><div class="camera-corner corner-bl"></div><div class="camera-corner corner-br"></div>
+            <span class="cam-local">LOCAL FEED <i>●</i></span>
+          </div>
+          <div class="tracking-line"><span>HAND / POSE SCORE</span><div class="meter-track"><i id="confidence-meter"></i></div><b id="confidence-value">--</b></div>
+        </section>
+
+        <aside id="formation-rail" class="formation-rail" aria-label="Blade formations">
+          <span class="rail-label">FORMATIONS</span>
+          <button data-formation="orbit" class="formation-button is-selected" title="Orbit formation"><i class="formation-glyph glyph-orbit"></i><span>ORBIT</span><kbd>1</kbd></button>
+          <button data-formation="halo" class="formation-button" title="Halo formation"><i class="formation-glyph glyph-halo"></i><span>HALO</span><kbd>2</kbd></button>
+          <button data-formation="spiral" class="formation-button" title="Spiral formation"><i class="formation-glyph glyph-spiral"></i><span>SPIRAL</span><kbd>3</kbd></button>
+          <button data-formation="shield" class="formation-button" title="Shield formation"><i class="formation-glyph glyph-shield"></i><span>SHIELD</span><kbd>4</kbd></button>
+          <button data-formation="spearhead" class="formation-button" title="Spearhead formation"><i class="formation-glyph glyph-spear"></i><span>SPEAR</span><kbd>5</kbd></button>
+        </aside>
+      </main>
+
+      <div class="gesture-strip"><span class="gesture-strip-label">GESTURE KEY</span><button id="swarm-mode" class="text-control scene-mode-button is-selected" aria-pressed="true">⚔ SWARM</button><button id="dragon-mode" class="text-control scene-mode-button" aria-pressed="false">DRAGON FLIGHT</button><span class="strip-divider"></span><span><i class="gesture-hand">✋</i> OPEN <b>GATHER / STEER</b></span><span><i class="gesture-hand fist-symbol">●</i> FIST <b>COMPACT / DIVE</b></span><span><i class="gesture-hand">⌖</i> PINCH <b>CHARGE</b></span><span><i class="gesture-hand">↗</i> SWIPE <b>LAUNCH / BREATHE FIRE</b></span><span class="strip-divider"></span><button id="pause-toggle" class="text-control">Ⅱ &nbsp; PAUSE</button><button id="reset-button" class="text-control">↺ &nbsp; RECALL</button><button id="camera-toggle" class="text-control" hidden>CAMERA OFF</button></div>
+
+      <aside id="settings-panel" class="drawer" aria-hidden="true">
+        <div class="drawer-heading"><div><small>FIELD PARAMETERS</small><h2>Settings</h2></div><button class="close-button" data-close="settings" aria-label="Close settings">×</button></div>
+        <label class="setting-row"><span>Tracking sensitivity <b id="sensitivity-value">68%</b></span><input id="sensitivity" type="range" min="30" max="100" value="68" /></label>
+        <label class="setting-row"><span>Visual quality</span><select id="quality-select"><option value="auto">Adaptive</option><option value="high">High detail</option><option value="balanced">Balanced</option><option value="low">Performance</option></select></label>
+        <label class="setting-row"><span>Preferred hand</span><select id="hand-select"><option value="any">Auto detect</option><option value="right">Right hand</option><option value="left">Left hand</option></select></label>
+        <div class="drawer-footnote"><span class="privacy-lock">◈</span> Vision processing runs locally in your browser.</div>
+      </aside>
+
+      <aside id="guide-panel" class="drawer guide-drawer" aria-hidden="true">
+        <div class="drawer-heading"><div><small>FIELD MANUAL / 01</small><h2>Command the swarm</h2></div><button class="close-button" data-close="guide" aria-label="Close gesture guide">×</button></div>
+        <div class="guide-list"><div><span>01</span><b>OPEN PALM</b><small>In Swarm, gather and steer the blades. In Dragon Flight, guide the creature.</small></div><div><span>02</span><b>CLOSE YOUR FIST</b><small>Pull the swarm into guard or pitch the dragon into a dive.</small></div><div><span>03</span><b>PINCH THUMB + INDEX</b><small>Focus the formation and charge.</small></div><div><span>04</span><b>SWIPE OR THRUST</b><small>Launch a blade volley, or breathe fire while Dragon Flight is selected.</small></div><div><span>05</span><b>V SIGN</b><small>Hold index and middle fingers upright to switch formations.</small></div></div>
+        <div class="drawer-footnote">Mouse alternative: move to steer, click to launch, keys 1–5 to change formation.</div>
+      </aside>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <footer class="footerline"><span>SWORDFLOW <i>·</i> INTERACTIVE WEAPON SYSTEM</span><span>BUILD 01 <i>·</i> VISION LOCAL</span></footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

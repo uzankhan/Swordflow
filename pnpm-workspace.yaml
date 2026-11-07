@@ -1,0 +1,2 @@
+allowBuilds:
+  '@mediapipe/tasks-vision': true
