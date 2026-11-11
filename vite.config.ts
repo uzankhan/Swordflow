@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  // GitHub Pages hosts this project at https://uzankhan.github.io/Swordflow/
+  base: '/Swordflow/',
+  // The MediaPipe worker is an ES-module worker, so build it as an ES module too.
+  worker: { format: 'es' },
   server: {
     host: '0.0.0.0',
     port: 3000,
